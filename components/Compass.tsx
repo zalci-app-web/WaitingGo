@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 interface CompassProps {
@@ -8,7 +9,22 @@ interface CompassProps {
 }
 
 export function Compass({ bearing, alpha }: CompassProps) {
-  const rotation = alpha !== null ? bearing - alpha : 0;
+  const [rotation, setRotation] = useState<number>(0);
+  const prevRotationRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (alpha === null) return;
+    const targetBase = bearing - alpha;
+
+    let diff = targetBase - (prevRotationRef.current % 360);
+    // 最短距離になるよう -180 ~ +180 の範囲に正規化
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+
+    const newRotation = prevRotationRef.current + diff;
+    prevRotationRef.current = newRotation;
+    setRotation(newRotation);
+  }, [bearing, alpha]);
 
   return (
     <div className="relative flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80">

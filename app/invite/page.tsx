@@ -7,6 +7,7 @@ import { Compass } from "@/components/Compass";
 import { DistanceDisplay } from "@/components/DistanceDisplay";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useDeviceOrientation } from "@/hooks/useDeviceOrientation";
+import { useWakeLock } from "@/hooks/useWakeLock";
 import { calculateDistance, calculateBearing } from "@/utils/geoMath";
 import { geoCoordinatesSchema } from "@/utils/validation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +17,7 @@ function InviteContent() {
   const router = useRouter();
   const geo = useGeolocation();
   const orientation = useDeviceOrientation();
+  useWakeLock();
 
   const [targetLat, setTargetLat] = useState<number | null>(null);
   const [targetLon, setTargetLon] = useState<number | null>(null);
@@ -95,6 +97,21 @@ function InviteContent() {
             </div>
           </motion.div>
         )}
+
+        {/* 5m未満：レーダー波紋演出 */}
+        {distance !== null && distance < 5 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: [0, 0.4, 0], scale: [0.8, 1.2, 1.5] }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: Math.max(0.3, distance / 5), 
+              ease: "easeOut" 
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vw] z-0 rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(239,68,68,0.2)_0%,_transparent_60%)] pointer-events-none"
+          />
+        )}
       </AnimatePresence>
 
       {/* 上部: 距離表示 */}
@@ -107,14 +124,22 @@ function InviteContent() {
         <Compass bearing={bearing} alpha={orientation.alpha} />
       </section>
 
-      {/* 下部: GPSステータスバッジ */}
-      <section className="relative z-10 flex-shrink-0 flex items-center justify-center pb-12 pt-4">
+      {/* 下部: GPSステータスバッジ & Google Maps連携 */}
+      <section className="relative z-10 flex-shrink-0 flex flex-col items-center justify-center pb-12 pt-4 space-y-4">
         <div className="bg-white/95 backdrop-blur-md px-6 py-3 rounded-full shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] border border-slate-100 flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${isAccuracyLow ? "bg-amber-400" : "bg-emerald-400"} shadow-sm animate-pulse`} />
           <p className="text-[11px] font-black tracking-widest text-slate-500 uppercase">
             {isAccuracyLow ? "精度を調整中..." : "精度: 高・方向を更新中"}
           </p>
         </div>
+        <a 
+          href={`https://www.google.com/maps/dir/?api=1&destination=${targetLat},${targetLon}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-bold tracking-widest text-slate-400 bg-transparent border border-slate-200 rounded-full px-5 py-2 hover:bg-slate-50 transition-colors shadow-sm"
+        >
+          🗺 Googleマップで経路案内
+        </a>
       </section>
     </div>
   );
