@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { useGeolocation } from "@/hooks/useGeolocation";
 
 export default function Home() {
@@ -93,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* メインアクションボタン（下部固定） */}
-      <footer className="relative z-10 px-6 pb-12 pt-4">
+      <div className="relative z-10 px-6 pb-4 pt-4 mt-auto">
         <button
           onClick={handleShare}
           disabled={!inviteUrl}
@@ -105,6 +106,16 @@ export default function Home() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29" />
           </svg>
         </button>
+      </div>
+
+      {/* ページフッター（静的ページ・規約へのリンク） */}
+      <footer className="relative z-10 px-6 pb-10 pt-4 border-t border-slate-100/50">
+        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[11px] font-bold tracking-widest text-slate-400">
+          <li><Link href="/about" className="hover:text-slate-600 transition-colors">使い方</Link></li>
+          <li><Link href="/terms" className="hover:text-slate-600 transition-colors">利用規約</Link></li>
+          <li><Link href="/privacy" className="hover:text-slate-600 transition-colors">プライバシー</Link></li>
+          <li><a href="https://x.com/your_twitter_id" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600 transition-colors">運営者（X）</a></li>
+        </ul>
       </footer>
     </main>
   );
