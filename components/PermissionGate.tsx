@@ -54,14 +54,16 @@ export function PermissionGate({ children, onPermissionGranted }: PermissionGate
           </div>
         )}
 
-        {/* メインボタン */}
-        <button
-          onClick={handleStartNavigation}
-          disabled={loading}
-          className="w-full py-5 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-full shadow-lg shadow-blue-500/30 transition-transform duration-150 ease-out active:scale-95 disabled:opacity-40 disabled:active:scale-100"
-        >
-          {loading ? "準備中..." : "ナビを開始する"}
-        </button>
+        {/* メインボタン (エラー時は非表示) */}
+        {!error && (
+          <button
+            onClick={handleStartNavigation}
+            disabled={loading}
+            className="w-full py-5 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-full shadow-lg shadow-blue-500/30 transition-transform duration-150 ease-out active:scale-95 disabled:opacity-40 disabled:active:scale-100"
+          >
+            {loading ? "準備中..." : "ナビを開始する"}
+          </button>
+        )}
 
         {/* プライバシーポリシーリンク */}
         <button className="link-touchable text-xs">

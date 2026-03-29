@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { DeviceGuard } from "@/components/DeviceGuard";
 
 export default function Home() {
   const geo = useGeolocation();
@@ -42,9 +43,10 @@ export default function Home() {
   }, [inviteUrl, handleCopy]);
 
   return (
-    <main className="max-w-md mx-auto min-h-[100dvh] bg-gradient-to-b from-blue-50/80 to-white shadow-2xl relative overflow-hidden flex flex-col">
-      {/* 背景装飾 */}
-      <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
+    <DeviceGuard>
+      <main className="max-w-md mx-auto min-h-[100dvh] bg-gradient-to-b from-blue-50/80 to-white shadow-2xl relative overflow-hidden flex flex-col">
+        {/* 背景装飾 */}
+        <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none" />
 
       {/* ヘッダー */}
@@ -118,5 +120,6 @@ export default function Home() {
         </ul>
       </footer>
     </main>
+    </DeviceGuard>
   );
 }

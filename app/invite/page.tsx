@@ -10,6 +10,7 @@ import { useDeviceOrientation } from "@/hooks/useDeviceOrientation";
 import { useWakeLock } from "@/hooks/useWakeLock";
 import { calculateDistance, calculateBearing } from "@/utils/geoMath";
 import { geoCoordinatesSchema } from "@/utils/validation";
+import { DeviceGuard } from "@/components/DeviceGuard";
 import { motion, AnimatePresence } from "framer-motion";
 
 function InviteContent() {
@@ -147,10 +148,12 @@ function InviteContent() {
 
 export default function InvitePage() {
   return (
-    <Suspense fallback={<div className="max-w-md mx-auto min-h-[100dvh] bg-slate-50 shadow-2xl" />}>
-      <PermissionGate onPermissionGranted={() => {}}>
-        <InviteContent />
-      </PermissionGate>
-    </Suspense>
+    <DeviceGuard>
+      <Suspense fallback={<div className="max-w-md mx-auto min-h-[100dvh] bg-slate-50 shadow-2xl" />}>
+        <PermissionGate onPermissionGranted={() => {}}>
+          <InviteContent />
+        </PermissionGate>
+      </Suspense>
+    </DeviceGuard>
   );
 }
