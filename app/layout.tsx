@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "WaitingGo",
   description: "1タップ合流ナビゲーション",
   manifest: "/manifest.json",
+  other: {
+    "google-adsense-account": "ca-pub-7883451809989396",
+  },
 };
 
 export default function RootLayout({
