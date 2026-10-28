@@ -46,6 +46,16 @@ export default function AboutPage() {
           </div>
         </div>
 
+        <div>
+          <h2 className="text-lg font-black text-slate-900 mb-5">■ うまく使うコツ</h2>
+          <ul className="space-y-3 list-disc pl-5">
+            <li>GPSには数mから数十mの誤差があります。「このあたり」と表示されたら、画面の色（目印色）を相手に見せて、お互いを目で探してください。</li>
+            <li>招待URLは発行から60分で無効になります。待ち合わせ場所の座標が含まれるので、送る相手に気を付けてください。</li>
+            <li>LINEやXなどのアプリ内ブラウザでは、コンパスが正しく動きません。メニューから「Safariで開く」「ブラウザで開く」を選んでください。</li>
+            <li>スマホを8の字に回すと、コンパスの精度が上がります。</li>
+          </ul>
+        </div>
+
         <div className="mt-8 p-4 bg-slate-100 rounded-xl text-center">
           <p className="font-bold text-slate-500 text-xs">※アプリのインストールやログインは一切不要です。</p>
         </div>

@@ -6,9 +6,14 @@ import { useEnvironment } from "@/hooks/useEnvironment";
 
 interface DeviceGuardProps {
   children: ReactNode;
+  /**
+   * 環境判定が終わるまでに表示する静的な殻。サーバー描画の HTML にも含まれる。
+   * 位置情報の取得などの副作用を持つものは入れないこと（PC・アプリ内ブラウザでも一瞬表示されるため）。
+   */
+  placeholder?: ReactNode;
 }
 
-export function DeviceGuard({ children }: DeviceGuardProps) {
+export function DeviceGuard({ children, placeholder = null }: DeviceGuardProps) {
   const { isInAppBrowser, isDesktop, isInitialized } = useEnvironment();
   const [currentUrl, setCurrentUrl] = useState("");
 
@@ -18,7 +23,7 @@ export function DeviceGuard({ children }: DeviceGuardProps) {
     }
   }, []);
 
-  if (!isInitialized) return null;
+  if (!isInitialized) return <>{placeholder}</>;
 
   if (isInAppBrowser) {
     return (

@@ -1,25 +1,15 @@
 import { create } from "zustand";
 
+/**
+ * 画面をまたいで共有する端末センサーの状態。
+ * 権限ゲート(PermissionGate)で得た許可を、ナビ画面側のフックからも参照するために使う。
+ */
 interface NavigationState {
-  targetLat: number | null;
-  targetLon: number | null;
-  currentLat: number | null;
-  currentLon: number | null;
-  alpha: number | null;
-  
-  setTarget: (lat: number, lon: number) => void;
-  setCurrentPosition: (lat: number | null, lon: number | null) => void;
-  setAlpha: (alpha: number | null) => void;
+  orientationGranted: boolean;
+  setOrientationGranted: (granted: boolean) => void;
 }
 
 export const useNavigationStore = create<NavigationState>((set) => ({
-  targetLat: null,
-  targetLon: null,
-  currentLat: null,
-  currentLon: null,
-  alpha: null,
-
-  setTarget: (lat, lon) => set({ targetLat: lat, targetLon: lon }),
-  setCurrentPosition: (lat, lon) => set({ currentLat: lat, currentLon: lon }),
-  setAlpha: (alpha) => set({ alpha }),
+  orientationGranted: false,
+  setOrientationGranted: (granted) => set({ orientationGranted: granted }),
 }));

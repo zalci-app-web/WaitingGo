@@ -2,29 +2,28 @@
 
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { shortestDelta } from "@/utils/angle";
 
 interface CompassProps {
+  /** 目的地の方位（真北基準・度） */
   bearing: number;
-  alpha: number | null;
+  /** 端末が向いている方位（真北基準・度）。センサー値が届くまでは null */
+  heading: number | null;
 }
 
-export function Compass({ bearing, alpha }: CompassProps) {
+export function Compass({ bearing, heading }: CompassProps) {
   const [rotation, setRotation] = useState<number>(0);
   const prevRotationRef = useRef<number>(0);
 
   useEffect(() => {
-    if (alpha === null) return;
-    const targetBase = bearing - alpha;
+    if (heading === null) return;
 
-    let diff = targetBase - (prevRotationRef.current % 360);
-    // 最短距離になるよう -180 ~ +180 の範囲に正規化
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
-
+    // 現在の回転角から目標角までを最短経路で回す（累積角にして 360° 境界でも逆回りさせない）
+    const diff = shortestDelta(bearing - heading - prevRotationRef.current);
     const newRotation = prevRotationRef.current + diff;
     prevRotationRef.current = newRotation;
     setRotation(newRotation);
-  }, [bearing, alpha]);
+  }, [bearing, heading]);
 
   return (
     <div className="relative flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80">
@@ -56,6 +55,8 @@ export function Compass({ bearing, alpha }: CompassProps) {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 100 100"
           className="w-44 h-44 sm:w-52 sm:h-52"
+          role="img"
+          aria-label="目的地の方向を示す矢印"
         >
           <defs>
             <linearGradient id="arrowGrad" x1="50%" y1="0%" x2="50%" y2="100%">
