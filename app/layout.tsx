@@ -1,20 +1,20 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false, // スクロールやズームを防止しネイティブアプリ感を出す
 };
 
 export const metadata: Metadata = {
   title: "WaitingGo",
   description: "1タップ合流ナビゲーション",
   manifest: "/manifest.json",
-  other: {
-    "google-adsense-account": "ca-pub-7883451809989396",
+  icons: {
+    icon: "/icon-192x192.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -25,7 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        {children}
+        <ServiceWorkerRegister />
+      </body>
     </html>
   );
 }
